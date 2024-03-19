@@ -1,0 +1,258 @@
+teacher--ankit bansal
+thoufiq mohammed
+
+last_day(time),next_day(time,'MONDAY') 
+
+------ --------------------------------------------------------daily two sql question-------------------------
+
+date: 27/12/2023
+1) Find three consecutive seats which are empty
+
+ number is_empty 
+ 1       Y
+ 2       N
+ 3       Y
+ 4       Y
+ 5       Y
+ 6       N
+ 7       Y
+ 8       Y
+ 9       Y
+
+
+
+ANSWER: number  is_empty 
+        3       Y
+        4       Y
+        5       Y
+        7       Y
+        8       Y
+        9       Y
+
+sol : 1) lead approch 2) rank function   
+
+with temp as(
+select row_number() over(order by s.seat_no) rnk, s.*,
+seat_no-row_number() over(order by s.seat_no) diff
+from emp_seat s
+where s.is_empty='Y'),
+cnt as(select diff, count(*) as total_count 
+from temp group by diff having count(*)>=3)
+select * from temp where diff in(select diff from cnt);
+
+2) Find a number which appears three consecutive times
+       
+ id    number lead  lag
+ 1       1     1    -
+ 2       1     1  1
+ 3       1     2  1
+ 4       2     2  1 
+ 5       2     3  2
+ 6       3     2  2
+ 7       2     -  3
+answer 
+1
+solu: lead,lag and number should be equal.
+
+with temp as(select lead(numb,1) over(order by id) as lead,
+lag(numb,1) over(order by id) as lag,
+numb,id
+from consecutive 
+order by id)
+select * from temp t
+where numb=lead and numb=lag;
+---------------------------------------------------------------------------------------------------------------------------------------------------
+28/12/2023
+how to split the data of a column and placed into mutiple rows based on column deliminter.
+question:
+
+1	apple,orange,banana
+
+output
+1 apple 
+2 orange
+3 banana
+
+for snowflake solution we can use split_to_table function along with lateral
+
+SELECT *
+FROM namaste_python,
+ lateral SPLIT_TO_TABLE(content, ' ') AS t;
+
+split_to_Table work as a another table which can be used after first table and cannot be used in select directly
+
+for oracle still need to understand
+
+2. how to conver mutiple rows data into single rows
+
+1 math
+1 science
+1 english
+
+result
+1 math,science,english
+
+select listagg(value,' '),seq ---suitalbe for both oracle and snowflake
+from temp 
+group by seq;
+
+however thinks to remember is listagg changes data type on applying to integer/numeric data type. 
+
+31/12/2023
+
+FILENAME	TIME
+files_1.txt	MONDAY
+files_2.json	MONDAY
+files_3.csv	FRIDAY
+daily_extract.txt	FRIDAY
+data.avro	TUESDAY
+EXTRACT.csv	TUESDAY
+
+output
+
+TIME	LISTAGG(TYPE,',')	COUNT(*)
+MONDAY	.txt,.json	2
+FRIDAY	.csv,.txt	2
+TUESDAY	.avro,.csv	2
+
+sol:
+
+with temp as 
+(select substr(FILENAME,position('.',filename,1),LENGTH(FILENAME)) as type,time
+FROM FILES)
+select a.time,listagg(type,','),count(*) from temp a
+group by a.time;
+
+---------------------------points to ponder------------------------------------------------------------------------------------------------------
+
+
+---------------------------1/12/2024------------------------------------
+
+
+swipe in swipe out time calculation
+
+with log_in as (
+SELECT * FROM 
+(select empd_id, swipe,row_number() over(partition by empd_id order by flag) rnk from
+clocked_hours where flag='I')
+WHERE RNK=1),
+ log_out as
+(select empd_id,max(swipe) as swipe from
+clocked_hours where flag='O'
+group by empd_id)
+select  DATEDIFF(hour, log_out_time.swipe, log_in_time.swipe)  as total_time,log_out_time.empd_id  from log_in log_in_time inner join log_out log_out_time
+on log_in_time.empd_id=log_out_time.empd_id;
+
+
+------------------------------------2/12/2024----------
+
+
+find employees who is having sam salary in same dept
+
+select b.* from emp_salary a left join emp_salary b
+on ( a.salary=b.salary and a.emp_id<>b.emp_id)
+where b.name is not null
+order by b.dept_id;
+
+-----------------------------------3/12/2024---------
+
+team who atleast two member are passing the critria
+
+select teamid,count(*) from 
+(select rank() over(partition by criteria1,criteria2 order by teamid) as rnk,* from Ameriprise_LLC
+where criteria1='Y' and criteria2='Y'
+order by teamid)
+group by teamid
+having count(*)>1;
+   
+
+
+----------------------------------------------4/12/2024------------
+
+when you use aggregate function sum(),min,max along with partition by clause then it will give the result based on partition which is same like aggregrate function with group by but you cannot get other columns or full data when you use group by but with analytical function you get data from all tables.
+example is below
+  
+select 
+count(*) over(partition by teamid) as c ,*
+from Ameriprise_LLC;
+
+when you want to get other columms with group by clause you have to write a cte and need to join main table.
+
+
+-------------------------------------------
+
+Always remember if question were asked on continous number data for example, find seats which are continous empty,number of people contiously visited having count more than 100, any continoutity question can be solved by minus of id -rnk.
+
+
+--------------------------------------------5/12/2024------
+
+student who neither scored maximum and neither scored minimum in any exam
+
+with temp as(
+select max(score) max_score,min(score) min_score,exam_id from exams
+group by exam_id)
+select max(case when t.max_Score<>ex.score and t.min_score<>ex.score then 0 else 1 end)  flg,ex.student_id from temp t inner join exams ex
+on t.exam_id=ex.exam_id
+group by ex.student_id
+having flg=0;
+
+
+------------------------------
+
+caller whos first and last called mailed to the same person in single day--
+
+with temp as(select cast(datecalled as date) dt,min(datecalled) mindt,max(datecalled) maxdt,callerid from phonelog
+group by dt,callerid)
+select ph.* from temp t inner join phonelog ph
+on (t.callerid=ph.callerid) and t.mindt=ph.datecalled 
+inner join phonelog ph2
+on (t.callerid=ph2.callerid) and t.maxdt=ph2.datecalled
+where ph.recipientid=ph2.recipientid;
+
+
+
+
+-----------------------
+
+in 75k budget need to hire senior or junior 
+
+Things I learned 
+----No need to join two cte always to get the result
+------if you write one CTE you can use the result,columns while writing your next cte
+
+with senior as
+(select *,sum(salary) over(partition by experience order by experience,salary) 
+as sum_sal from candidates
+where experience='Senior'
+),
+ Junior as
+(select *,sum(salary) over(partition by experience order by experience,salary) 
+as sum_sal from candidates
+where experience='Junior'
+),
+finalsenior as(Select * from senior
+where sum_sal<=75000)
+select * from finalsenior
+union all
+select * from junior 
+where sum_Sal<=75000-(select max(sum_sal) from finalsenior);
+
+
+-----------------------------------------------
+
+second most recent acitity if only one acitity then select that
+ with temp as(select row_number() over(partition by username order by startdate) rnk,
+count(*) over(partition by username) cnt,*
+from activity1
+order by 3)
+select *
+ from temp
+ where rnk=case when (cnt>1 and rnk=2) then 2 when cnt=1 then 1 end;
+
+
+
+ 
+  
+
+
+
