@@ -1,4 +1,4 @@
-
+--
 COALESCE function is used to return the first non-null expression in a list. It takes multiple arguments and returns the value of the first non-null expression in the list. If all the expressions in the list are null, then COALESCE returns null.
 
 example:coalesce(COLUMN1,COLUMN2)
