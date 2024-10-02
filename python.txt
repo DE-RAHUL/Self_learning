@@ -1,0 +1,342 @@
+return the sum of number for tuple
+
+def fun(*numbers):
+    total = 0
+    for x in numbers:
+        total += x
+    print(total)
+fun(8, 2, 3, 0, 6)
+
+return the sum of number for tuple
+def fun(numbers):
+    total =0
+    for x in numbers:
+        total += x
+    print(total)
+fun([8, 2, 3, 0, 6])
+
+Question: check if any particular number is present in array, if present then sum else add
+
+def fun(*value):
+   if(10 in value):
+      total=0
+      print('10 is present')
+      for element in value:
+        total += element
+        return total
+      else:
+        print('loop finished')    
+fun(10, 20, 30)
+
+
+print character to lower and upper case
+
+def func(practical):
+    for x in practical:
+        a=''
+        b=''
+        if x.isupper():
+            a=x.lower()
+        elif x.islower():
+            b=x.upper()
+        else:
+            print("number is special char")   
+        print(a+b,end=" ")            
+func('RahUl')
+
+
+
+------count the string for lower can uppercase character.
+
+def func(practical):
+    a=0
+    b=0
+    for x in practical:
+        if x.isupper():
+            a += 1   
+        elif x.islower():
+            b +=1
+        else:
+            print("number is special char")    
+    print(a)
+    print(b)                  
+func('lOweR')
+
+-----------------if duplicate in the list is found then create a list which is unique list out of duplicate------
+
+def func(list):
+    new_list = []
+    for x in list:
+        if x not in new_list:
+           new_list.append(x)
+    print(new_list)
+func([1,3,4,6,7,1,2,3,4])
+
+
+-----------------exception handling in function------------------------
+
+def call(*args):
+    try:
+       for x in args:
+           print(x/0)
+    except Exception as e:
+        print(e)
+        print('enter a number')       
+call([3,4]) 
+
+
+-----------------------how to call inner function if gets defined in python ------
+
+def func(name):
+    print('outer function')
+    def inner():
+        print('x')
+    return inner()
+func('tim') ---it will give both inner and outer resutlt
+
+
+------how to call only inner function without calling outer function-------------------------
+
+
+def hello(name='Jose'):
+    
+    def greet():
+        return '\t This is inside the greet() function'
+    
+    def welcome():
+        return "\t This is inside the welcome() function"
+    
+    if name == 'Jose':
+        return greet
+    else:
+        return welcome
+x = hello('Jose')    
+print(x())  
+
+
+-------------------------------------factorial of a number--------
+
+def fact(num):
+    y=1
+    for x in range(2,int(num)+1):
+        y*=x
+    print(y)
+num=input('enter a number') 
+fact(num) 
+-------------------------------------basic question to understant and practice-----------------------
+
+suppose if have string like 'abcdef'----> how can do it in a,b,c,d
+
+for a single word you need to check each letter in it then you can use simpley a for loop
+
+def split_name(num):
+  a=[]
+  for x in num:
+        a.append(x)
+  print(a)
+split_name('ROHIT')  
+
+
+--------------------------------------------------------------------------------
+
+suppose instead of printing in single row I want to print in a single column then how I will do
+
+input abcde
+ouput a
+      b
+      c
+      d
+      e
+
+def split_name(num):
+    a = []
+    for x in num:
+        a.append(x)
+    for char in a:
+        print(char)
+
+split_name('ROHIT')
+
+--------------------------------------------now comes to the number -----------------
+
+input 12345----> 1,2,3,4,5
+
+def convert(num):
+    a = str(num)
+    d=num
+    b=[]
+    for x in a:
+        b.append(x)
+    print(b)
+    print(b[-1]) #last item in list
+    print(b[::-1]) #from reverse print all item 
+    print(b[:-1])# remove 1 item from last
+    print(b[0:2])#start with item first and print till 2nd
+    print(a.count('1'))# it will count how many times a element present in list,string function
+   # lenght function also works on str
+convert(12345)
+
+python multiply normal= a*b
+square a**2
+cube   a**3
+----------------------------------
+
+
+join function works on list you can add comma,double comma b/w number is list and can remove the comma as well.
+
+
+--------------------------------prime number check---------------------------
+
+def primenumber(lower, upper):
+    for num in range(lower, upper+1):
+        print('value of upper:', num)
+        if num > 1:
+            for y in range(2, num):
+                print('value of lower:', num)
+                print('value of y:', y)
+                if num % y == 0:
+                    x=num%y
+                    print(x)
+                    break
+            else:  # This else block belongs to the inner for loop
+                print(num)   
+
+primenumber(1,10)
+
+
+range(2,2) will give nothing
+range(2,1) will not get executed as this is wrong.
+range(2,5) --> 2,3,4 but not 5
+
+if you use else block inside for loop block then else block will get only executed when all its iterations of for loop will get over.
+
+
+--------------------------------------------armstrong number---------------------
+
+for loop cannot iterate over a number but for loop can iterate over string and you can convert a number to string to iterate over a number.
+
+def is_armstrong(num):
+    num_str = str(num)
+    num_digits = len(num_str)
+    armstrong_sum = 0
+    for digit in num_str:
+        armstrong_sum += int(digit) ** num_digits
+    print(armstrong_sum)
+is_armstrong(153) 
+----------------------------------------------print armstrong number b/w two numbers---------------------------
+
+
+
+def is_armstrong(lower, upper):
+    for each_num in range(lower,upper+1):
+        num_str = str(each_num)
+        num_digits = len(num_str)
+        sum=0
+        for each_element in num_str:
+             sum += int(each_element)**num_digits
+        if(sum == int(num_str)):
+          print(sum) 
+
+is_armstrong(0,153)      
+
+
+-----------------factor of a number --------------------------------
+
+def factor(num):
+    for x in range(1,num+1):
+        if(num%x==0):
+           print(x)
+factor(12) 
+
+--------------table of any number-------------------------------------
+
+def table_of(num):
+      y=0
+      for i in range(1,10):
+          y=num*i
+          print(y)
+table_of(12)
+
+----------------fibnonnic series--
+
+it can be easliy implemented through list
+
+def table_of(num):
+    lis=[0,1]  
+    for x in range(2,num):
+        print(x)
+        lis.append(lis[-1]+lis[-2])
+    print(lis)
+table_of(6)    
+
+-----------program to get prime factors of a number-----
+
+
+def primenumber(lower, upper):
+    prime_numbers = []
+    for num in range(lower, upper+1):
+        if num > 1:
+            for y in range(2, num):
+                if num % y == 0:
+                    break
+            else:
+                prime_numbers.append(num)
+    return prime_numbers
+
+def prime_factors(num, primes):
+    factors = []
+    for prime in primes:
+        while num % prime == 0: ---> here you used while loop beacuse you dont know when the reminder will be 0
+            factors.append(prime)
+            num //= prime
+    return factors
+
+# Get the list of prime numbers
+primes = primenumber(1, 10) --> here a function value is getting assigned to variable 
+
+# Get the prime factors of a number
+number = int(input("Enter a number to find its prime factors: "))
+factors = prime_factors(number, primes)-----here how you can pass a function inside another function
+print("Prime factors of", number, "are:", factors)
+
+------------------------------------------program to get prime factors of more than one number.
+def primenumber(lower, upper):
+    prime_numbers = []
+    for num in range(lower, upper+1):
+        if num > 1:
+            for y in range(2, num):
+                if num % y == 0:
+                    break
+            else:
+                prime_numbers.append(num)
+    return prime_numbers
+
+def prime_factors(numbers, primes):
+    all_factors = []
+    for num in numbers:
+        factors = []
+        for prime in primes:
+            while num % prime == 0:
+                factors.append(prime)
+                num //= prime
+        all_factors.append(factors) how to append a list into another list.
+    return all_factors
+
+# Get the list of prime numbers
+primes = primenumber(1, 10)
+
+# Get the prime factors of multiple numbers
+numbers = [int(x) for x in input("Enter numbers separated by space: ").split()]
+factors = prime_factors(numbers, primes)
+print(factors)
+
+# Print the prime factors of each number
+for i, num in enumerate(numbers):
+    print("Prime factors of", num, "are:", factors[i])
+
+learning from this program : you can take input from the user and split it based on space.
+by default input from user is string, you can assing it to a list variable and then can use as function parameter
+enumerate --> it a build in python function which gives index postion and number for list
+return will return the final output to the function which can be later on used , print will only print the result.
+
+
